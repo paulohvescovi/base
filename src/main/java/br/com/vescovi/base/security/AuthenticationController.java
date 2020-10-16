@@ -1,5 +1,8 @@
-package br.com.vescovi.base.secutiry;
+package br.com.vescovi.base.security;
 
+import br.com.vescovi.base.security.jwt.JwtUtil;
+import br.com.vescovi.base.security.payloads.JwtRequest;
+import br.com.vescovi.base.security.payloads.JwtResponse;
 import br.com.vescovi.base.user.User;
 import br.com.vescovi.base.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,37 +15,35 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/auth")
 public class AuthenticationController {
 
 	@Autowired private AuthenticationManager authenticationManager;
 	@Autowired private JwtUtil jwtTokenUtil;
 	@Autowired private UserService userService;
 
-	@PostMapping(value = "/login")
-	//@CrossOrigin
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-		HttpHeaders responseHeaders = new HttpHeaders();
+	@PostMapping
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 		
 		Authentication authenticate = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
 		);
 
-		//if authentication was succesful else throw an exception
 		final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getUsername());
 		final String jwt = jwtTokenUtil.generateToken(userDetails);
-		AuthenticationResponse response = new AuthenticationResponse(jwt);
 
-		response.setId(1);
-		response.setUsername(userDetails.getUsername());
+		JwtResponse response = JwtResponse.builder()
+				.jwt(jwt)
+				.username(userDetails.getUsername())
+				.roles(Collections.singletonList(
+						((User) authenticate.getPrincipal()).getRole()
+				))
+				.build();
 
-//		List<String> roles = new ArrayList<String>();
-//		userDetails.getAuthorities().forEach((a) -> roles.add(a.getAuthority()));
-
-//		response.setRoles(roles);
-
-		return new ResponseEntity<>(response, responseHeaders, HttpStatus.OK);
+		return ResponseEntity.ok(response);
 	
 	}
 	

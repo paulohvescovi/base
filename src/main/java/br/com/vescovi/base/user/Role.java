@@ -1,6 +1,6 @@
 package br.com.vescovi.base.user;
 
-public enum UserRole {
+public enum Role {
 
     ADMIN,
     USER

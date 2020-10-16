@@ -1,4 +1,4 @@
-package br.com.vescovi.base.secutiry;
+package br.com.vescovi.base.security;
 
 
 import java.io.IOException;
@@ -19,8 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CORSFilter implements Filter {
-    public void destroy() {
-    }
+
     public static String VALID_METHODS = "DELETE, HEAD, GET, OPTIONS, POST, PUT";
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {

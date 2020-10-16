@@ -1,5 +1,7 @@
-package br.com.vescovi.base.secutiry;
+package br.com.vescovi.base.security;
 
+import br.com.vescovi.base.security.jwt.JwtAuthenticationEntryPoint;
+import br.com.vescovi.base.security.jwt.JwtRequestFilter;
 import br.com.vescovi.base.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,19 +14,17 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfigurationSource;
 
 @EnableWebSecurity
-public class SecurityContext extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired private UserService myUserDetailsService;
-
+    @Autowired private UserService userService;
     @Autowired private JwtRequestFilter jwtRequestFilter;
-    @Autowired CorsConfigurationSource CorsConfiguration;
+    @Autowired private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(myUserDetailsService);
+        auth.userDetailsService(userService);
     }
 
     @Bean
@@ -41,11 +41,11 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().disable().csrf().disable()
-                .authorizeRequests().antMatchers("/v1/login").permitAll().
+                .authorizeRequests().antMatchers("/auth/**").permitAll().
                 anyRequest().authenticated()
                 .and().
-                exceptionHandling().
-                and().sessionManagement()
+                exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }

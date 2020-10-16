@@ -1,11 +1,11 @@
-package br.com.vescovi.base.secutiry;
+package br.com.vescovi.base.security.jwt;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import br.com.vescovi.base.user.UserRole;
+import br.com.vescovi.base.user.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -59,10 +59,10 @@ public class JwtUtil {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
     
-    public static boolean checkRole(Collection<? extends GrantedAuthority> authorities, UserRole userRole) {
+    public static boolean checkRole(Collection<? extends GrantedAuthority> authorities, Role userRole) {
 		
     	for(GrantedAuthority authority: authorities) {
-    		if(authority.getAuthority().contains(UserRole.ADMIN.toString() ))
+    		if(authority.getAuthority().contains(Role.ADMIN.toString() ))
     				return true;
     	}
 		

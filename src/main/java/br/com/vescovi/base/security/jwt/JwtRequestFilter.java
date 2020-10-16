@@ -1,4 +1,4 @@
-package br.com.vescovi.base.secutiry;
+package br.com.vescovi.base.security.jwt;
 
 import java.io.IOException;
 
@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.vescovi.base.security.jwt.JwtUtil;
 import br.com.vescovi.base.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
