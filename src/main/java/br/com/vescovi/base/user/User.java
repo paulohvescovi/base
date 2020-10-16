@@ -16,7 +16,8 @@ import java.util.Collections;
 
 @Data
 @Builder
-@Entity(name = "users")
+@Entity
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements Serializable, UserDetails {

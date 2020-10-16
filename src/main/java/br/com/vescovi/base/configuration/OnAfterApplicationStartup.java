@@ -1,8 +1,6 @@
 package br.com.vescovi.base.configuration;
 
-import br.com.vescovi.base.user.Role;
-import br.com.vescovi.base.user.User;
-import br.com.vescovi.base.user.UserService;
+import br.com.vescovi.base.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -14,6 +12,8 @@ import java.util.Optional;
 public class OnAfterApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
 
   @Autowired private UserService userService;
+  @Autowired private UserData userData;
+  @Autowired private UserRepository userRepository;
 
   @Override
   public void onApplicationEvent(final ApplicationReadyEvent event) {
