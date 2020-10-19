@@ -2,10 +2,10 @@ package br.com.vescovi.base.framework.controller;
 
 import br.com.vescovi.base.framework.service.BaseService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @RestController
 public abstract class BaseController<T, ID>{
@@ -13,13 +13,11 @@ public abstract class BaseController<T, ID>{
     protected abstract BaseService<T, ID> getService();
 
     @GetMapping
-    private List<T> findAll(){
-        return getService().findAll();
-    }
-
-    @GetMapping
-    private Page<T> findAll(Pageable pageable){
-        return getService().findAll(pageable);
+    private Page<T> find(@RequestParam(defaultValue = "0") Integer page,
+                         @RequestParam(defaultValue = "20") Integer size){
+        return getService().findAll(
+                PageRequest.of(page, size)
+        );
     }
 
     @GetMapping("{id}")
@@ -28,7 +26,7 @@ public abstract class BaseController<T, ID>{
     }
 
     @PostMapping
-    public T save(@RequestBody T entity) {
+    public T save(@Valid @RequestBody T entity) {
         return getService().save(entity);
     }
 
