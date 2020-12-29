@@ -5,6 +5,7 @@ import br.com.vescovi.base.security.payloads.JwtRequest;
 import br.com.vescovi.base.security.payloads.JwtResponse;
 import br.com.vescovi.base.user.User;
 import br.com.vescovi.base.user.UserService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,7 @@ import java.util.Collections;
 
 @RestController
 @RequestMapping("/auth")
+@Log4j2
 public class AuthenticationController {
 
 	@Autowired private AuthenticationManager authenticationManager;
@@ -59,10 +61,10 @@ public class AuthenticationController {
 	
 
 	@GetMapping(value = "/hello")
-
 	public ResponseEntity<?> greetHello() throws Exception {
 		HttpHeaders responseHeaders = new HttpHeaders();
 		System.out.println(applicationNameBean);
+		log.info("teste bem loco");
 		return new ResponseEntity<>(applicationName, responseHeaders, HttpStatus.OK);
 	}
 }
