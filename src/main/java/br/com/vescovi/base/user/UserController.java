@@ -17,4 +17,6 @@ public class UserController extends BaseController<User, Long> {
     protected BaseService<User, Long> getService() {
         return userService;
     }
+
+
 }

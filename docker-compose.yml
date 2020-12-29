@@ -1,0 +1,19 @@
+version: '3.5'
+services:
+
+  db:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_DATABASE: base
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - /home/paulo/workspace/paulo/base/mysql:/var/lib/mysql
+    networks:
+      - hr-net
+
+networks:
+  hr-net:
+    driver: bridge

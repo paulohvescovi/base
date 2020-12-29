@@ -6,6 +6,8 @@ import br.com.vescovi.base.security.payloads.JwtResponse;
 import br.com.vescovi.base.user.User;
 import br.com.vescovi.base.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,13 @@ public class AuthenticationController {
 	@Autowired private AuthenticationManager authenticationManager;
 	@Autowired private JwtUtil jwtTokenUtil;
 	@Autowired private UserService userService;
+
+	//bean custom
+	@Autowired @Qualifier("applicationNameBean") private String applicationNameBean;
+
+	@Value("${spring.application.name}")
+	private String applicationName;
+
 
 	@PostMapping
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
@@ -50,11 +59,10 @@ public class AuthenticationController {
 	
 
 	@GetMapping(value = "/hello")
-	//@CrossOrigin
-	//@GetMapping(value = "/login")
+
 	public ResponseEntity<?> greetHello() throws Exception {
-	//public ResponseEntity<?> createAuthenticationToken() throws Exception {
-	HttpHeaders responseHeaders = new HttpHeaders();
-	return new ResponseEntity<>("Helloworld", responseHeaders, HttpStatus.OK);
+		HttpHeaders responseHeaders = new HttpHeaders();
+		System.out.println(applicationNameBean);
+		return new ResponseEntity<>(applicationName, responseHeaders, HttpStatus.OK);
 	}
 }
