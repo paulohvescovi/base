@@ -19,7 +19,7 @@ public class OnAfterApplicationStartup implements ApplicationListener<Applicatio
   public void onApplicationEvent(final ApplicationReadyEvent event) {
 
     //create user for test if not exists on start application
-    if (Optional.ofNullable(userService.findById(1L)).isEmpty()){
+    if (!Optional.ofNullable(userService.findById(1L)).isPresent()){
       userService.save(
               User.builder()
                       .email("paulo20091994@gmail.com")
