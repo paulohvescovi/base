@@ -15,6 +15,8 @@ Projeto Java CRUD com alguns exemplos
  - BaseController, BaseService
  - Dockerfile
  - Dockercompose
+ - ControllerAdvice (Exception Handler) tratar execoes rest customizadas
+ - Javax validation for entity and DTO Objects
 
 
 
