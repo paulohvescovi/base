@@ -1,5 +1,6 @@
 package br.com.vescovi.base.mapstruct.cliente;
 
+import br.com.vescovi.base.exception.ClienteBadRequestException;
 import br.com.vescovi.base.framework.controller.BaseController;
 import br.com.vescovi.base.framework.service.BaseService;
 import br.com.vescovi.base.mapstruct.cliente.mapper.ClienteMapper;
@@ -7,13 +8,11 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/clientes")
@@ -34,13 +33,32 @@ public class ClienteController extends BaseController<Cliente, Long> {
     }
 
     @PostMapping("postDTO")
-    public ResponseEntity<ClienteDTO> postDTO(@RequestBody ClienteDTO clienteDTO){
+    public ResponseEntity<ClienteDTO> postDTO(@Valid @RequestBody ClienteDTO clienteDTO){
 
         Cliente cliente = clienteMapper.toEntity(clienteDTO);
+//        Cliente cliente2 = ClienteMapper.INSTANCE.toEntity(clienteDTO);
+
+        Cliente saved = clienteService.save(cliente);
+
+        clienteDTO = clienteMapper.toDTO(saved);
+
+        return new ResponseEntity<>(clienteDTO, HttpStatus.CREATED);
+    }
+
+    @PutMapping("putDTO/{id}")
+    public ResponseEntity<ClienteDTO> putDTO(@Valid @RequestBody ClienteDTO clienteDTO, @PathVariable("id") Long id){
+        Cliente cliforSave = Optional.ofNullable(
+                clienteService.findById(id)
+        ).orElseThrow(() -> new ClienteBadRequestException("cliente nao encontrado"));
+
+//        Cliente cliente = clienteMapper.toEntity(clienteDTO);
+
         Cliente cliente2 = ClienteMapper.INSTANCE.toEntity(clienteDTO);
 
+        Cliente saved = clienteService.save(cliente2);
 
-        clienteService.save(cliente);
+        clienteDTO = clienteMapper.toDTO(saved);
+
         return new ResponseEntity<>(clienteDTO, HttpStatus.CREATED);
     }
 

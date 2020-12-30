@@ -26,7 +26,7 @@ public class Cliente implements Serializable {
     @NotEmpty(message = "nome do cliente nao pode ser vazio")
     private String nome;
 
-    @Column(name = "cnpj", length = 200, nullable = false)
+    @Column(name = "cnpj", length = 200, nullable = false, unique = true)
     @CNPJ(message = "cnpj invalido")
     private String cnpj;
 
