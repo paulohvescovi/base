@@ -13,7 +13,7 @@ public abstract class BaseController<T, ID>{
     protected abstract BaseService<T, ID> getService();
 
     @GetMapping
-    private Page<T> find(@RequestParam(defaultValue = "0") Integer page,
+    public Page<T> find(@RequestParam(defaultValue = "0") Integer page,
                          @RequestParam(defaultValue = "20") Integer size){
         return getService().findAll(
                 PageRequest.of(page, size)
@@ -21,7 +21,7 @@ public abstract class BaseController<T, ID>{
     }
 
     @GetMapping("{id}")
-    private T findById(@PathVariable ID id){
+    public T findById(@PathVariable ID id){
         return getService().findById(id);
     }
 
@@ -31,7 +31,7 @@ public abstract class BaseController<T, ID>{
     }
 
     @DeleteMapping("{id}")
-    protected void delete(@PathVariable ID id){
+    public void delete(@PathVariable ID id){
         getService().delete(
                 getService().findById(id)
         );

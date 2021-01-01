@@ -27,11 +27,6 @@ public class ClienteController extends BaseController<Cliente, Long> {
         return clienteService;
     }
 
-    @Override
-    public Cliente save(@Valid Cliente entity) {
-        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
-    }
-
     @PostMapping("postDTO")
     public ResponseEntity<ClienteDTO> postDTO(@Valid @RequestBody ClienteDTO clienteDTO){
 

@@ -1,5 +1,6 @@
 package br.com.vescovi.base.mapstruct.cliente;
 
+import br.com.vescovi.base.util.ClienteCreator;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
@@ -24,7 +25,7 @@ class ClienteRepositoryTest {
     @Test
     @DisplayName("Testando salvar cliente no banco de dados")
     void save_PersistCliente_WhenSuccessful(){
-        Cliente clienteForSave = createCliente();
+        Cliente clienteForSave = ClienteCreator.createClienteParaSalvar();
         Cliente clienteSaved = clienteRepository.save(clienteForSave);
 
         Assertions.assertThat(clienteSaved).isNotNull();
@@ -36,7 +37,7 @@ class ClienteRepositoryTest {
     @Test
     @DisplayName("Testando atualizar cliente no banco de dados")
     void save_UpdateCliente_WhenSuccessful(){
-        Cliente clienteForSave = createCliente();
+        Cliente clienteForSave = ClienteCreator.createClienteParaSalvar();
         Cliente clienteSaved = clienteRepository.save(clienteForSave);
 
         clienteSaved.setNome("Cliente Alterado");
@@ -51,7 +52,7 @@ class ClienteRepositoryTest {
     @Test
     @DisplayName("Testando deletar cliente no banco de dados")
     void delete_UpdateCliente_WhenSuccessful(){
-        Cliente clienteForSave = createCliente();
+        Cliente clienteForSave = ClienteCreator.createClienteParaSalvar();
         Cliente clienteSaved = clienteRepository.save(clienteForSave);
 
         clienteRepository.delete(clienteSaved);
@@ -64,7 +65,7 @@ class ClienteRepositoryTest {
     @Test
     @DisplayName("Buscando pelo  nome no banco de dados")
     void findByNome_ReturnListOfCliente_WhenSuccessful(){
-        Cliente clienteforSave1 = createCliente();
+        Cliente clienteforSave1 = ClienteCreator.createClienteParaSalvar();
         Cliente clienteSaved1 = clienteRepository.save(clienteforSave1);
 
         List<Cliente> clienteList = clienteRepository.findFirstByNomeContaining("Cliente");
@@ -77,7 +78,7 @@ class ClienteRepositoryTest {
     @Test
     @DisplayName("Buscando pelo nome que nao existe no banco de dados")
     void findByNome_ReturnEmptyListOfCliente_WhenSuccessful(){
-        Cliente clienteforSave1 = createCliente();
+        Cliente clienteforSave1 = ClienteCreator.createClienteParaSalvar();
         Cliente clienteSaved1 = clienteRepository.save(clienteforSave1);
 
         List<Cliente> clienteList = clienteRepository.findFirstByNomeContaining("Paulo");
@@ -103,10 +104,4 @@ class ClienteRepositoryTest {
                 .withMessageContaining("nome do cliente nao pode ser vazio");
     }
 
-    private Cliente createCliente(){
-        return Cliente.builder()
-                .nome("Cliente test jpa")
-                .cnpj("64181424000182")
-                .build();
-    }
 }
