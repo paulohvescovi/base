@@ -1,9 +1,8 @@
-package br.com.vescovi.base.mapstruct.cliente;
+package br.com.vescovi.base.cliente;
 
 import br.com.vescovi.base.util.ClienteCreator;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @DisplayName("Testes para cliente Repository")

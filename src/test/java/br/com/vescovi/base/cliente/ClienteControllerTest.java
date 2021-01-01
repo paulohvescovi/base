@@ -1,6 +1,6 @@
-package br.com.vescovi.base.mapstruct.cliente;
+package br.com.vescovi.base.cliente;
 
-import br.com.vescovi.base.mapstruct.cliente.mapper.ClienteMapper;
+import br.com.vescovi.base.cliente.mapper.ClienteMapper;
 import br.com.vescovi.base.util.ClienteCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,40 +13,37 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.validation.ConstraintViolationException;
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+//@SpringBootTest
 @ExtendWith(SpringExtension.class)
-@DisplayName("Testes para o service de cliente")
-class ClienteServiceImplTest {
+@DisplayName("Testes para o Controller de cliente")
+class ClienteControllerTest {
 
     @InjectMocks
-    private ClienteServiceImpl clienteService;
+    private ClienteController clienteController;
 
-    @Mock private ClienteRepository clienteRepositoryMock;
+    @Mock private ClienteService clienteServiceMock;
+    @Mock private ClienteMapper clienteMapper;
 
     @BeforeEach
     void setup(){
         PageImpl<Cliente> clientePage = new PageImpl<>(List.of(ClienteCreator.createClienteValido()));
         BDDMockito
-                .when(clienteRepositoryMock.findAll(ArgumentMatchers.any(PageRequest.class)))
+                .when(clienteServiceMock.findAll(ArgumentMatchers.any()))
                 .thenReturn(clientePage);
 
         BDDMockito
-                .when(clienteRepositoryMock.findById(ArgumentMatchers.anyLong()))
-                .thenReturn(Optional.of(ClienteCreator.createClienteValido()));
-
-        BDDMockito
-                .when(clienteRepositoryMock.save(ArgumentMatchers.any(Cliente.class)))
+                .when(clienteServiceMock.findById(ArgumentMatchers.anyLong()))
                 .thenReturn(ClienteCreator.createClienteValido());
 
-        BDDMockito.doNothing().when(clienteRepositoryMock).delete(ArgumentMatchers.any(Cliente.class));
+        BDDMockito
+                .when(clienteServiceMock.save(ArgumentMatchers.any(Cliente.class)))
+                .thenReturn(ClienteCreator.createClienteValido());
+
+        BDDMockito.doNothing().when(clienteServiceMock).delete(ArgumentMatchers.any(Cliente.class));
 
     }
 
@@ -55,7 +52,7 @@ class ClienteServiceImplTest {
     void list_ReturnsListOfClientesPageObjecj_When_successful(){
         Cliente clienteEsperado = ClienteCreator.createClienteValido();
 
-        Page<Cliente> clientesRetornados =  clienteService.findAll(PageRequest.of(0,1));
+        Page<Cliente> clientesRetornados = clienteController.find(0, 1);
 
         Assertions.assertThat(clientesRetornados)
                 .isNotEmpty()
@@ -68,17 +65,14 @@ class ClienteServiceImplTest {
     @Test
     @DisplayName("buscando pelo codigo do cliente")
     void findById_ReturnsClienteById_When_successful(){
-        Cliente clienteExperado = ClienteCreator.createClienteValido();
+        Long idExperado = ClienteCreator.createClienteValido().getId();
 
-        Optional<Cliente> clienteEncontrado = clienteRepositoryMock.findById(1L);
+        Cliente clienteEncontrado = clienteController.findById(1L);
 
-        Assertions.assertThat(clienteEncontrado).isNotNull()
-            .isPresent()
-            .isEqualTo(Optional.of(clienteExperado));
-
-        Assertions.assertThat(clienteEncontrado.get().getId())
+        Assertions.assertThat(clienteEncontrado).isNotNull();
+        Assertions.assertThat(clienteEncontrado.getId())
                 .isNotNull()
-                .isEqualTo(clienteExperado.getId());
+                .isEqualTo(idExperado);
 
     }
 
@@ -86,10 +80,10 @@ class ClienteServiceImplTest {
     @DisplayName("buscando pelo codigo do cliente inexistente")
     void findById_ReturnsNull_WhenSuccessful(){
         BDDMockito
-                .when(clienteRepositoryMock.findById(ArgumentMatchers.anyLong()))
-                .thenReturn(Optional.empty());
+                .when(clienteServiceMock.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(null);
 
-        Cliente clienteEncontrado = clienteService.findById(1L);
+        Cliente clienteEncontrado = clienteController.findById(1L);
 
         Assertions.assertThat(clienteEncontrado).isNull();
 
@@ -100,7 +94,7 @@ class ClienteServiceImplTest {
     void save_ReturnsClienteSaved_WhenSuccessful(){
         Long idExperado = ClienteCreator.createClienteValido().getId();
 
-        Cliente clienteEncontrado = clienteRepositoryMock.save(ClienteCreator.createClienteParaSalvar());
+        Cliente clienteEncontrado = clienteController.save(ClienteCreator.createClienteParaSalvar());
 
         Assertions.assertThat(clienteEncontrado).isNotNull();
         Assertions.assertThat(clienteEncontrado.getId())
@@ -112,9 +106,15 @@ class ClienteServiceImplTest {
     @Test
     @DisplayName("Deletando cliente pelo id")
     void delete_RemoverCliente_WhenSuccessful(){
-        Cliente clienteforDelete = ClienteCreator.createClienteValido();
-        Assertions.assertThatCode(() -> clienteRepositoryMock.delete(clienteforDelete))
+
+        Assertions.assertThatCode(() -> clienteController.delete(1L))
                 .doesNotThrowAnyException();
+
+        //se respondesse com ResponseEntity por exemplo
+//        ResponseEntity<Void> entity = clienteController.delete(1L);
+//        Assertions.assertThat(entity).isNotNull();
+//        Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
     }
 
 }

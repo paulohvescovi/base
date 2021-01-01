@@ -1,6 +1,6 @@
 package br.com.vescovi.base.util;
 
-import br.com.vescovi.base.mapstruct.cliente.Cliente;
+import br.com.vescovi.base.cliente.Cliente;
 
 public class ClienteCreator {
 

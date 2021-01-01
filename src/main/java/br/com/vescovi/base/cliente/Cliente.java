@@ -1,4 +1,4 @@
-package br.com.vescovi.base.mapstruct.cliente;
+package br.com.vescovi.base.cliente;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

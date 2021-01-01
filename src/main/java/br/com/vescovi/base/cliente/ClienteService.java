@@ -1,4 +1,4 @@
-package br.com.vescovi.base.mapstruct.cliente;
+package br.com.vescovi.base.cliente;
 
 import br.com.vescovi.base.framework.service.BaseService;
 

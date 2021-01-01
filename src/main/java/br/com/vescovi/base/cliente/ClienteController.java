@@ -1,15 +1,15 @@
-package br.com.vescovi.base.mapstruct.cliente;
+package br.com.vescovi.base.cliente;
 
+import br.com.vescovi.base.cliente.mapper.ClienteMapper;
 import br.com.vescovi.base.exception.ClienteBadRequestException;
 import br.com.vescovi.base.framework.controller.BaseController;
 import br.com.vescovi.base.framework.service.BaseService;
-import br.com.vescovi.base.mapstruct.cliente.mapper.ClienteMapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -20,7 +20,8 @@ import java.util.Optional;
 public class ClienteController extends BaseController<Cliente, Long> {
 
     @NonNull private final ClienteService clienteService;
-    @NonNull private final ClienteMapper clienteMapper;
+    @NonNull
+    private final ClienteMapper clienteMapper;
 
     @Override
     protected BaseService<Cliente, Long> getService() {
