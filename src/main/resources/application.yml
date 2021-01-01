@@ -20,3 +20,9 @@ server:
     context-path: /api
   error:
     include-stacktrace: on_param
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG

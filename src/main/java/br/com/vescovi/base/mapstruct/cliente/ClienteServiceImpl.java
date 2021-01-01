@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ClienteServiceImpl extends BaseServiceImpl<Cliente, Long> implements ClienteService {
 
-    @NonNull private final ClienteData clienteData;
+    @NonNull private final ClienteRepository clienteRepository;
 
     @Override
     protected JpaRepository<Cliente, Long> getData() {
-        return clienteData;
+        return clienteRepository;
     }
 }
