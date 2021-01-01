@@ -2,11 +2,13 @@ package br.com.vescovi.base.mapstruct.cliente;
 
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,6 +84,23 @@ class ClienteRepositoryTest {
 
         Assertions.assertThat(clienteList).isNotNull();
         Assertions.assertThat(clienteList).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Salvando cliente sem nome, deve lancar ConstraintValidationException")
+    void save_throwConstraintExceotion_WhenNomeIsNull(){
+        Cliente clienteForSave = new Cliente();
+
+//        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+//            @Override
+//            public void call() throws Throwable {
+//                clienteRepository.save(clienteForSave);
+//            }
+//        }).isInstanceOf(ConstraintViolationException.class);
+
+        Assertions.assertThatExceptionOfType(ConstraintViolationException.class)
+                .isThrownBy(() -> clienteRepository.save(clienteForSave))
+                .withMessageContaining("nome do cliente nao pode ser vazio");
     }
 
     private Cliente createCliente(){
