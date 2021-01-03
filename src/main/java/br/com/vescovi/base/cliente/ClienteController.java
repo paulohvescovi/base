@@ -55,7 +55,7 @@ public class ClienteController extends BaseController<Cliente, Long> {
 
         clienteDTO = clienteMapper.toDTO(saved);
 
-        return new ResponseEntity<>(clienteDTO, HttpStatus.CREATED);
+        return new ResponseEntity<>(clienteDTO, HttpStatus.NO_CONTENT);
     }
 
 }
